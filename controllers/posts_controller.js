@@ -1,6 +1,6 @@
 const connection = require('../data/db')
-const posts = require('../data/posts')
-
+/* const posts = require('../data/posts')
+ */
 function index(req, res) {
     const sql = 'SELECT * FROM posts'
     connection.query(sql, (err, results) => {
@@ -12,13 +12,6 @@ function index(req, res) {
 
     })
 
-    /*  const tag = req.query.tags
-     const filteredPost = posts.filter((thisPost) => thisPost.tags && thisPost.tags.includes(tag))
-     if (tag) {
-         return res.json(filteredPost)
-     } else {
-         res.json(posts)
-     } */
 }
 function show(req, res) {
 
@@ -76,16 +69,22 @@ function modify(req, res) {
     res.send('Modify a post with slug of ' + req.params.slug)
 }
 function destroy(req, res) {
-    const postSlug = req.params.slug
-    const index = posts.findIndex((thisPost) => thisPost.slug === postSlug);
-    if (index !== -1) {
-        posts.splice(index, 1);
-        console.log(posts);
-        res.status(204).json({
-            error: '204 no content',
-            message: 'No content'
+    const postId = Number(req.params.id)
+    console.log(postId);
+
+    const sql = `DELETE FROM posts WHERE id = ?`
+
+    connection.query(sql, [postId], (err, results) => {
+        if (err) return res.status(500).json({
+            error: 'Query failed'
         })
-    }
+        if (results.affectedRows === 0) return res.status(404).json({
+            message: 'There is nothing to delete'
+        })
+        res.sendStatus(204)
+    })
+
+
 
 }
 

@@ -12,15 +12,15 @@ router.get('/:slug', postsController.show)
 router.post('/', postsController.store)
 
 // Update
-router.put('/:title', postsController.update) 
+router.put('/:title', postsController.update)
 
 
 // Modify
-router.patch('/:slug', postsController.modify) 
+router.patch('/:slug', postsController.modify)
 
 
 // Delete
-router.delete('/:slug', postsController.destroy)
+router.delete('/:id', postsController.destroy)
 
 
 module.exports = router
