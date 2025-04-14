@@ -15,7 +15,25 @@ function index(req, res) {
 }
 function show(req, res) {
 
-    const postSlug = req.params.slug
+    const postId = Number(req.params.id)
+
+    const sql = `SELECT * FROM posts WHERE id = ?`
+
+    connection.query(sql, [postId], (err, results) => {
+        if (err) return res.status(500).json({
+            error: 'Query failed'
+        })
+        if (results.length === 0) return res.status(404).json({
+            message: 'There is nothing to show'
+        })
+        const post = results[0]
+
+        res.json(post)
+
+    })
+
+
+    /* const postSlug = req.params.slug
     const foundPost = posts.find((thisPost => thisPost.slug === postSlug))
     if (foundPost) {
         return res.json(foundPost)
@@ -25,7 +43,7 @@ function show(req, res) {
             message: 'Post not found'
 
         })
-    }
+    } */
 }
 function store(req, res) {
     console.log(req.body);
@@ -70,7 +88,6 @@ function modify(req, res) {
 }
 function destroy(req, res) {
     const postId = Number(req.params.id)
-    console.log(postId);
 
     const sql = `DELETE FROM posts WHERE id = ?`
 
